@@ -7,8 +7,10 @@ from django.http import HttpResponse
 
 
 def graph_view(request):
+    # Trigger the sentiment analysis Lambda function
+
     # Set your S3 bucket name and the path to your CSV file
-    bucket_name = 'sentiment590e'
+    bucket_name = 'sentiment590'
     file_key = 'sentiment_analysis_results.csv'
 
     # Create an S3 client
@@ -20,10 +22,10 @@ def graph_view(request):
 
     # Parse the CSV data
     reader = csv.DictReader(StringIO(csv_data))
-    sentiment_counts = {'positive': 0, 'neutral': 0, 'negative': 0}
+    sentiment_counts = {'POSITIVE': 0, 'NEUTRAL': 0, 'NEGATIVE': 0, 'MIXED': 0}
 
     for row in reader:
-        sentiment = row['sentimental']
+        sentiment = row['sentiment']
         sentiment_counts[sentiment] += 1
 
     # Prepare the graph
