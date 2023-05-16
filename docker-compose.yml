@@ -27,6 +27,21 @@ services:
              python manage.py runserver 0.0.0.0:8000"
     depends_on:
       - db
+    tty: true
+
+  master:
+    image: locustio/locust
+    ports:
+     - "8089:8089"
+    volumes:
+      - ./:/mnt/locust
+    command: -f /mnt/locust/locustfile.py --master -H http://127.0.0.1:8089
+
+  worker:
+    image: locustio/locust
+    volumes:
+      - ./:/mnt/locust
+    command: -f /mnt/locust/locustfile.py --worker --master-host master
 
 volumes:
   pgdata:
